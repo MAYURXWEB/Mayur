@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mayur Prajapat — Video Editor</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      color: #fff;
+    }
+    canvas#bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: float 10s infinite ease-in-out;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); opacity: 0.5; }
+      50% { transform: translateY(-50px) translateX(30px); opacity: 1; }
+      100% { transform: translateY(0) translateX(0); opacity: 0.5; }
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      padding: 50px;
+      text-align: center;
+      animation: fadeIn 2s ease;
+      box-shadow: 0 0 40px rgba(255,255,255,0.25), 0 0 60px rgba(255,0,150,0.3);
+      z-index: 1;
+      max-width: 600px;
+      transform: scale(0.95);
+      transition: transform 0.6s ease;
+    }
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 60px rgba(255,255,255,0.4), 0 0 100px rgba(255,0,150,0.4);
+    }
+    .card h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #ff6a00, #ee0979, #00c6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 3s infinite alternate;
+    }
+    .card h2 {
+      margin-bottom: 20px;
+      font-weight: 500;
+      color: #f1f1f1;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .card p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      animation: fadeUp 3s ease;
+    }
+    .highlights {
+      margin: 25px 0;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .highlight {
+      background: rgba(255,255,255,0.15);
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      transition: all 0.4s ease;
+    }
+    .highlight:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-8px);
+    }
+    .socials a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: bold;
+      transition: transform 0.3s, color 0.3s;
+    }
+    .socials a:hover {
+      transform: scale(1.3) rotate(8deg);
+      color: #00c6ff;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 20px #ff6a00; }
+      to { text-shadow: 0 0 35px #00c6ff; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  <div class="card">
+    <h1>Mayur Prajapat</h1>
+    <h2>Creative Video Editor</h2>
+    <p>Hi, I'm Mayur! A passionate video editor skilled in storytelling, transitions, and motion graphics. I specialize in crafting cinematic edits, dynamic effects, and engaging reels that capture attention. My style blends creativity with smooth visual flow to keep every viewer hooked. 🚀</p>
+    
+    <div class="highlights">
+      <div class="highlight">✨ Cinematic Transitions</div>
+      <div class="highlight">🎬 Storytelling Cuts</div>
+      <div class="highlight">🔥 Motion Graphics</div>
+      <div class="highlight">📱 Viral Reels & Shorts</div>
+    </div>
+
+    <div class="socials">
+      <a href="https://www.instagram.com/mayur_prajapat_09/?hl=en" target="_blank">Instagram</a>
+      <a href="https://youtube.com/@skullfacez?si=KE-TiJvCGFZI3hcq" target="_blank">YouTube</a>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let stars = [], meteors = [];
+
+    for (let i = 0; i < 150; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.2,
+        opacity: Math.random()
+      });
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "white";
+      stars.forEach(s => {
+        ctx.globalAlpha = s.opacity;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fill();
+        s.opacity += (Math.random() - 0.5) * 0.02;
+        if (s.opacity < 0) s.opacity = 0;
+        if (s.opacity > 1) s.opacity = 1;
+      });
+    }
+
+    function createMeteor() {
+      meteors.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        length: Math.random() * 80 + 20,
+        speed: Math.random() * 6 + 4,
+        opacity: Math.random()
+      });
+    }
+
+    function drawMeteors() {
+      for (let i = 0; i < meteors.length; i++) {
+        let m = meteors[i];
+        ctx.strokeStyle = `rgba(255,255,255,${m.opacity})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(m.x - m.length, m.y + m.length);
+        ctx.stroke();
+        m.x += m.speed;
+        m.y += m.speed;
+        if (m.x > canvas.width || m.y > canvas.height) {
+          meteors.splice(i, 1);
+          i--;
+        }
+      }
+    }
+
+    function animate() {
+      drawStars();
+      drawMeteors();
+      requestAnimationFrame(animate);
+    }
+
+    setInterval(createMeteor, 2000);
+    animate();
+
+    // Floating colorful particles
+    function createParticles(num) {
+      for (let i = 0; i < num; i++) {
+        let particle = document.createElement("div");
+        particle.classList.add("particle");
+        let size = Math.random() * 8 + 4;
+        particle.style.width = size + "px";
+        particle.style.height = size + "px";
+        particle.style.background = `hsl(${Math.random()*360}, 70%, 60%)`;
+        particle.style.top = Math.random() * window.innerHeight + "px";
+        particle.style.left = Math.random() * window.innerWidth + "px";
+        particle.style.animationDuration = (5 + Math.random() * 10) + "s";
+        document.body.appendChild(particle);
+      }
+    }
+
+    createParticles(40);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
